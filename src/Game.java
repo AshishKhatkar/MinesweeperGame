@@ -80,11 +80,13 @@ public class Game extends JPanel
 				int sc = Integer.parseInt(data[1]);
 				String pn = data[0];
 				scoreMap.put(pn, sc);
+				str = br.readLine();
 			}
 		}
 		catch(Exception e)
 		{
-			System.out.println("File Not Found");
+			e.printStackTrace();
+			System.out.println("File Can't be opened Found");
 		}
 		try
 		{
@@ -93,6 +95,7 @@ public class Game extends JPanel
 		}
 		catch(Exception e)
 		{
+			e.printStackTrace();
 			System.out.println("File can't be closed");
 		}
 	}
@@ -174,25 +177,25 @@ public class Game extends JPanel
 		frame.setJMenuBar(gm.buildMenu());
 		frame.setSize(400, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		editTextArea.setBackground(Color.WHITE);
-//		editTextArea.setForeground(Color.BLUE);
-//		editTextArea.setSize(50, 60);
-//		uneditTextArea.setEditable(false);
-//		Container c = frame.getContentPane();
-//		c.add(editTextArea, BorderLayout.SOUTH);
-//		c.add(inputButton, BorderLayout.WEST);
-//		c.add(uneditTextArea, BorderLayout.CENTER);
-//		inputButton.addActionListener(new ActionListener()
-//		{
-//			@Override
-//			public void actionPerformed(ActionEvent e)
-//			{
-//				name = editTextArea.getText().toString();
-//				editTextArea.setText("");
-//				inputButton.setText("Now click on new to play");
-//				nameEntered = true;
-//			}
-//		});
+		editTextArea.setBackground(Color.WHITE);
+		editTextArea.setForeground(Color.BLUE);
+		editTextArea.setSize(50, 60);
+		uneditTextArea.setEditable(false);
+		Container c = frame.getContentPane();
+		c.add(editTextArea, BorderLayout.SOUTH);
+		c.add(inputButton, BorderLayout.WEST);
+		c.add(uneditTextArea, BorderLayout.CENTER);
+		inputButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				name = editTextArea.getText().toString();
+				editTextArea.setText("");
+				inputButton.setText("Now click on new to play");
+				nameEntered = true;
+			}
+		});
 		System.out.println(name);
 		frame.setVisible(true);
 //		gm.playerName = name;
@@ -316,7 +319,6 @@ public class Game extends JPanel
 						board.gridStatus[i][j] = board.MINE;
 				}
 			}
-			writeScore();
 		}
 		
 		/*
@@ -361,6 +363,7 @@ public class Game extends JPanel
 						board.gridStatus[i][j] = board.FINISH;
 				}
 			}
+			writeScore();
 		}
 	}
 	
@@ -386,12 +389,8 @@ public class Game extends JPanel
 			{
 				int data = scoreMap.get(key);
 				System.out.println(key + " " + data);
-//				bw.write(key);
-				CharSequence csq = key + " " + data;
+				CharSequence csq = key + " " + data + "\n";
 				bw.append(csq);
-//				bw.write(" ");
-//				bw.write(data);
-//				bw.write("\n");
 			}
 		}
 		catch(Exception e)

@@ -1,2 +1,1 @@
-# MinesweeperGame
-Minesweeper Game in JAVA
+Minsweeper Game in JAVA
