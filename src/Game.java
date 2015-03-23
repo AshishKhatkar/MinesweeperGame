@@ -11,12 +11,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.io.*;
 import javax.imageio.*;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.sound.sampled.*;
+import java.util.*;
 public class Game extends JPanel
 {
 	protected String playerName;
@@ -32,6 +35,7 @@ public class Game extends JPanel
 	public static final JButton inputButton = new JButton("Enter");
 	private static String name;
 	public static boolean nameEntered;
+	public static boolean gameStarted;
 	protected static HashMap<String, Integer> scoreMap;
 	protected static Game gm;
 	
@@ -158,6 +162,7 @@ public class Game extends JPanel
 				else
 				{
 					inputButton.setVisible(false);
+					gameStarted = true;
 					initGame();
 				}
 			}
@@ -194,14 +199,32 @@ public class Game extends JPanel
 				editTextArea.setText("");
 				inputButton.setText("Now click on new to play");
 				nameEntered = true;
+				gm.playerName = name;
 			}
 		});
-		System.out.println(name);
 		frame.setVisible(true);
-//		gm.playerName = name;
-		System.out.println(gm.playerName);
 		gm.audioClip.start();
 		gm.audioClip.loop(gm.audioClip.LOOP_CONTINUOUSLY);
+		Timer timer = new Timer();
+		timer.scheduleAtFixedRate(new TimerTask(){
+			@Override
+			public void run()
+			{
+				if(gm.nameEntered && gm.gameStarted)
+				{
+					System.out.println("yahan hoon");
+					gm.gameTime--;
+					gm.repaint();
+					if(gm.gameTime == 0)
+					{
+						JOptionPane.showMessageDialog(gm, "har gya be tu. tujhse na ho payega");
+						gm.gameFinished = true;
+						return;
+					}
+				}
+			}
+		}, 1000, 1000);
+		
 	}
 	
 	/*
@@ -375,7 +398,6 @@ public class Game extends JPanel
 		BufferedWriter bw = null;
 		try
 		{
-			System.out.println("here");
 			bw = new BufferedWriter(new FileWriter("scores/scores.txt"));
 			if(scoreMap.containsKey(gm.playerName))
 			{
@@ -384,11 +406,9 @@ public class Game extends JPanel
 			}
 			else
 				scoreMap.put(gm.playerName, score);
-			System.out.println(playerName);
 			for(String key : scoreMap.keySet())
 			{
 				int data = scoreMap.get(key);
-				System.out.println(key + " " + data);
 				CharSequence csq = key + " " + data + "\n";
 				bw.append(csq);
 			}
